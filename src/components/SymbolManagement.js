@@ -22,10 +22,13 @@ import {
   DialogActions,
   TextField,
   IconButton,
+  InputLabel,
   Select,
   MenuItem,
   Snackbar,
-  Alert
+  Alert,
+  Input,
+  FormControl
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -38,6 +41,7 @@ const SymbolManagement = ({ openSidebar }) => {
   const [symbols, setSymbol] = useState([]);
   const [assetNames, setAssetName] = useState([]);
   const [formulaNames, setFormulaName] = useState([]);
+  const [formulas, setFormulas] = useState()
 
   // Modal States
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -49,7 +53,6 @@ const SymbolManagement = ({ openSidebar }) => {
     type: '',
     code: '',
     assetName: '',
-    formulaName: ''
   });
   const [errors, setErrors] = useState({});
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -66,6 +69,7 @@ const SymbolManagement = ({ openSidebar }) => {
       .then((res) => {
         setSymbol(res.data.symbols);
         setAssetName(res.data.assetNames);
+        setFormulas(res.data.formulas)
       })
       .catch((err) => {
         console.log('Error fetching symbols', err);
@@ -114,10 +118,6 @@ const SymbolManagement = ({ openSidebar }) => {
     if (!newSymbol.assetName) {
       tempErrors.assetName = 'Asset Name is required';
     }
-    if (!newSymbol.formulaName) {
-      tempErrors.formulaName = 'Formula Name is required';
-    }
-
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -140,6 +140,7 @@ const SymbolManagement = ({ openSidebar }) => {
             type: '',
             assetName: ''
           });
+          setFormulaName('')
         })
         .catch((error) => {
           const errorMessage =
@@ -420,64 +421,62 @@ const SymbolManagement = ({ openSidebar }) => {
           <TextField
             label="Code"
             fullWidth
-            style={{ marginBottom: '10px' }}
+            style={{ marginBottom: '15px' }}
             margin="dense"
             value={newSymbol.code}
             onChange={(e) => handleNewUserChange('code', e.target.value)}
             error={Boolean(errors.code)}
             helperText={errors.code}
           />
-          <Select
-            label="Asset Name"
+
+          {/* Asset Name Select */}
+          <FormControl fullWidth>
+            <InputLabel
+              htmlFor="asset-name"
+              sx={{
+                backgroundColor: 'white',
+                padding: '0, 10px, 0, 10px'
+              }}
+              margin='dense'
+            >
+              Asset Name
+            </InputLabel>
+            <Select
+              id="asset-name"
+              fullWidth
+              margin="dense"
+              value={newSymbol.assetName}
+              style={{ marginBottom: '15px' }}
+              onChange={(e) => handleNewUserChange('assetName', e.target.value)}
+              error={Boolean(errors.assetName)}
+            >
+              {assetNames?.map((asset) => (
+                <MenuItem key={asset.name} value={asset.name} onClick={() => setFormulaName(asset.name)}>
+                  {asset.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {errors.assetName && (
+              <Typography
+                color="error"
+                variant="body2"
+                style={{ marginTop: '4px' }}
+              >
+                {errors.assetName}
+              </Typography>
+            )}
+          </FormControl>
+
+          <TextField
+            label="Formula"
             fullWidth
             margin="dense"
-            value={newSymbol.assetName}
-            onChange={(e) => handleNewUserChange('assetName', e.target.value)}
-            error={Boolean(errors.assetName)}
-            style={{ marginBottom: '10px' }}
-          >
-            <MenuItem value="">Asset Name</MenuItem>
-            <MenuItem value="">Good</MenuItem>
-            <MenuItem value="">Hi</MenuItem>
-            {assetNames?.map((asset) => (
-              <MenuItem key={asset.name} value={asset.name} onClick={() => setFormulaName(asset.formulas)}>
-                {asset.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.assetName && (
-            <Typography
-              color="error"
-              variant="body2"
-              style={{ marginTop: '4px' }}
-            >
-              {errors.assetName}
-            </Typography>
-          )}
-          <Select
-            label="Formula Name"
-            fullWidth
-            margin="dense"
-            value={newSymbol.formulaName}
-            onChange={(e) => handleNewUserChange('formulaName', e.target.value)}
-            error={Boolean(errors.formulaName)}
-          >
-            <MenuItem value="">Formula Name</MenuItem>
-            {formulaNames.map((formula) => (
-              <MenuItem key={formula.name} value={formula.name}>
-                {formula.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.formulaName && (
-            <Typography
-              color="error"
-              variant="body2"
-              style={{ marginTop: '4px' }}
-            >
-              {errors.formulaName}
-            </Typography>
-          )}
+            value={formulas?.find(formula => formula.name === formulaNames)?.formula || ""} 
+            InputProps={{
+              readOnly: true,
+              shrink: true
+            }}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenCreateModal(false)} color="primary">
@@ -536,64 +535,59 @@ const SymbolManagement = ({ openSidebar }) => {
             helperText={errors.code}
             style={{ marginBottom: '10px' }}
           />
-          <Select
-            label="Asset Name"
+          {/* Asset Name Select */}
+          <FormControl fullWidth>
+            <InputLabel
+              htmlFor="asset-name"
+              sx={{
+                backgroundColor: 'white',
+                padding: '0, 10px, 0, 10px'
+              }}
+              margin='dense'
+            >
+              Asset Name
+            </InputLabel>
+            <Select
+              id="asset-name"
+              fullWidth
+              margin="dense"
+              value={selectedSymbol?.assetName || ''}
+              style={{ marginBottom: '15px' }}
+              onChange={(e) =>
+                setSelectedSymbol((prev) => ({
+                  ...prev,
+                  assetName: e.target.value
+                }))
+              }
+              error={Boolean(errors.assetName)}
+            >
+              {assetNames?.map((asset) => (
+                <MenuItem key={asset.name} value={asset.name} onClick={() => {setFormulaName(asset.name)}}>
+                  {asset.name}
+                </MenuItem>
+              ))}
+            </Select>
+            {errors.assetName && (
+              <Typography
+                color="error"
+                variant="body2"
+                style={{ marginTop: '4px' }}
+              >
+                {errors.assetName}
+              </Typography>
+            )}
+          </FormControl>
+
+          <TextField
+            label="Formula"
             fullWidth
             margin="dense"
-            value={selectedSymbol?.assetName || ''}
-            onChange={(e) =>
-              setSelectedSymbol((prev) => ({
-                ...prev,
-                assetName: e.target.value
-              }))
-            }
-            error={Boolean(errors.assetName)}
-            style={{ marginBottom: '10px' }}
-          >
-            {assetNames.map((asset) => (
-              <MenuItem key={asset.name} value={asset.name} onClick={() => setFormulaName(asset.formulas)}>
-                {asset.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.assetName && (
-            <Typography
-              color="error"
-              variant="body2"
-              style={{ marginTop: '4px' }}
-            >
-              {errors.assetName}
-            </Typography>
-          )}
-          <Select
-            label="Formula Name"
-            fullWidth
-            margin="dense"
-            value={selectedSymbol?.formulaName || ''}
-            onChange={(e) =>
-              setSelectedSymbol((prev) => ({
-                ...prev,
-                formulaName: e.target.value
-              }))
-            }
-            error={Boolean(errors.formulaName)}
-          >
-            <MenuItem value="">Formula Name</MenuItem>
-            {formulaNames.map((formula) => (
-              <MenuItem key={formula.name} value={formula.name}>
-                {formula.name}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.formulaName && (
-            <Typography
-              color="error"
-              variant="body2"
-              style={{ marginTop: '4px' }}
-            >
-              {errors.formulaName}
-            </Typography>
-          )}
+            value={formulas?.find(formula => formula.name === formulaNames)?.formula || ""} 
+            InputProps={{
+              readOnly: true,
+              shrink: true
+            }}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEditModal(false)} color="primary">
