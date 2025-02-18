@@ -49,6 +49,7 @@ const SymbolAssets = ({ openSidebar }) => {
         name: '',
         pip_size: '',
         lot_size: '',
+        commission: '',
     });
     const [errors, setErrors] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -108,6 +109,10 @@ const SymbolAssets = ({ openSidebar }) => {
             tempErrors.lot_size = 'Lot size is required';
         }
 
+        if (!newAsset.commission) {
+            tempErrors.commission = 'Commission is required';
+        }
+
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
     };
@@ -140,6 +145,7 @@ const SymbolAssets = ({ openSidebar }) => {
                         name: '',
                         pip_size: '',
                         lot_size: '',
+                        commission: '',
                     });
                     setErrors({});
                 })
@@ -279,6 +285,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Name</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>PIP Size</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Lot Size</TableCell>
+                                        <TableCell style={{ color: '#fff', textAlign: 'center' }}>Commission</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Created At</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Action</TableCell>
                                         {/* <TableCell style={{ color: '#fff', textAlign: 'center' }}>Details</TableCell> */}
@@ -291,6 +298,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                                 <TableCell style={{ textAlign: 'center' }}>{asset.name}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>{asset.pip_size}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>{asset.lot_size}</TableCell>
+                                                <TableCell style={{ textAlign: 'center' }}>{asset.commission}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>{formatDate(asset.createdAt)}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>
                                                     <IconButton onClick={() => handleEditSymbol(asset)}>
@@ -305,34 +313,6 @@ const SymbolAssets = ({ openSidebar }) => {
                                                         {openRows[asset.id] ? <ExpandLess /> : <ExpandMore />}
                                                     </IconButton>
                                                 </TableCell> */}
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell colSpan={5} style={{ padding: 0 }}>
-                                                    <Collapse in={openRows[asset.id]} timeout="auto" unmountOnExit>
-                                                        <Box margin={2}>
-                                                            <Table size="small" style={{ backgroundColor: '#e0f7fa' }}>
-                                                                <TableHead>
-                                                                    <TableRow>
-                                                                        <TableCell style={{ textAlign: 'center' }}>Formula Name</TableCell>
-                                                                        <TableCell style={{ textAlign: 'center' }}>Formula</TableCell>
-                                                                        <TableCell style={{ textAlign: 'center' }}>PIP Size</TableCell>
-                                                                        <TableCell style={{ textAlign: 'center' }}>Created At</TableCell>
-                                                                    </TableRow>
-                                                                </TableHead>
-                                                                <TableBody>
-                                                                    {asset.formula?.map((formula) => (
-                                                                        <TableRow key={formula.id}>
-                                                                            <TableCell style={{ textAlign: 'center' }}>{formula.name}</TableCell>
-                                                                            <TableCell style={{ textAlign: 'center' }}>{formula.formula}</TableCell>
-                                                                            <TableCell style={{ textAlign: 'center' }}>{formula.pip_size}</TableCell>
-                                                                            <TableCell style={{ textAlign: 'center' }}>{formatDate(formula.createdAt)}</TableCell>
-                                                                        </TableRow>
-                                                                    ))}
-                                                                </TableBody>
-                                                            </Table>
-                                                        </Box>
-                                                    </Collapse>
-                                                </TableCell>
                                             </TableRow>
                                         </React.Fragment>
                                     ))}
@@ -354,6 +334,7 @@ const SymbolAssets = ({ openSidebar }) => {
                             name: '',
                             pip_size: '',
                             lot_size: '',
+                            commission: '',
                         });
                         setErrors({});
                         setOpenCreateModal(false);
@@ -406,10 +387,25 @@ const SymbolAssets = ({ openSidebar }) => {
                             helperText={errors.lot_size}
                             required
                         />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Commission"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            value={newAsset.commission}
+                            onChange={(e) =>
+                                handleNewUserChange('commission', e.target.value)
+                            }
+                            error={!!errors.commission}
+                            helperText={errors.commission}
+                            required
+                        />
 
-                        {errors.lot_size && (
+                        {errors.commission && (
                             <Typography color="error">
-                                {errors.lot_size}
+                                {errors.commission}
                             </Typography>
                         )}
                     </DialogContent>
@@ -420,6 +416,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                     name: '',
                                     pip_size: '',
                                     lot_size: '',
+                                    commission: '',
                                 });
                                 setErrors({});
                                 setOpenCreateModal(false);
@@ -518,6 +515,24 @@ const SymbolAssets = ({ openSidebar }) => {
                                     helperText={errors.lot_size}
                                     required
                                 />
+                                <TextField
+                                    margin="dense"
+                                    label="Commission"
+                                    type="number"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={selectedAsset.commission}
+                                    onChange={(e) => {
+                                        setSelectedAsset({
+                                            ...selectedAsset,
+                                            commission: e.target.value,
+                                        });
+                                    }
+                                    }
+                                    error={!!errors.commission}
+                                    helperText={errors.commission}
+                                    required
+                                />
                             </>
                         )}
                     </DialogContent>
@@ -551,6 +566,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                     name: '',
                                     pip_size: '',
                                     lot_size: '',
+                                    commission: '',
                                 });
                             }}
                             color="secondary"
