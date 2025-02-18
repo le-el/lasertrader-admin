@@ -80,7 +80,7 @@ const PositionManagement = ({ openSidebar }) => {
             <CircularProgress />
           </Box>
         ) : (
-          <TableContainer component={Paper} style={{ width: '110%' }}>
+          <TableContainer component={Paper} style={{ width: '115%' }}>
             <Table style={{ backgroundColor: '#f5f5f5' }}>
               <TableHead>
                 <TableRow
@@ -175,6 +175,14 @@ const PositionManagement = ({ openSidebar }) => {
                       textAlign: 'center'
                     }}
                   >
+                    Margin
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: '#fff',
+                      textAlign: 'center'
+                    }}
+                  >
                     RealProfit
                   </TableCell>
                   <TableCell
@@ -230,7 +238,10 @@ const PositionManagement = ({ openSidebar }) => {
                         {position.commission}
                       </TableCell>
                       <TableCell style={{ textAlign: 'center' }}>
-                        {position.realProfit}
+                        {position.margin}
+                      </TableCell>
+                      <TableCell style={{ textAlign: 'center' }}>
+                        {position.realProfit?.toFixed(2)}
                       </TableCell>
                       <TableCell style={{ textAlign: 'center' }}>
                         {position.closeReason}

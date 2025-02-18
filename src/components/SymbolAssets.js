@@ -28,6 +28,7 @@ import {
     Snackbar,
     Alert,
     Collapse,
+    InputLabel,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -47,6 +48,7 @@ const SymbolAssets = ({ openSidebar }) => {
     const [newAsset, setNewAsset] = useState({
         name: '',
         pip_size: '',
+        lot_size: '',
     });
     const [errors, setErrors] = useState({});
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -98,9 +100,12 @@ const SymbolAssets = ({ openSidebar }) => {
             tempErrors.name = 'Name is required';
         }
 
-        // Check if password is strong
         if (!newAsset.pip_size) {
             tempErrors.pip_size = 'Pip size is required';
+        }
+
+        if (!newAsset.lot_size) {
+            tempErrors.lot_size = 'Lot size is required';
         }
 
         setErrors(tempErrors);
@@ -134,6 +139,7 @@ const SymbolAssets = ({ openSidebar }) => {
                     setNewAsset({
                         name: '',
                         pip_size: '',
+                        lot_size: '',
                     });
                     setErrors({});
                 })
@@ -153,7 +159,6 @@ const SymbolAssets = ({ openSidebar }) => {
     };
 
     const handleUpdateSymbol = async () => {
-        // Logic for updating symbol information
         await axios
             .post(
                 `${config.BackendEndpoint}/updateAsset`,
@@ -273,9 +278,10 @@ const SymbolAssets = ({ openSidebar }) => {
                                     >
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Name</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>PIP Size</TableCell>
+                                        <TableCell style={{ color: '#fff', textAlign: 'center' }}>Lot Size</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Created At</TableCell>
                                         <TableCell style={{ color: '#fff', textAlign: 'center' }}>Action</TableCell>
-                                        <TableCell style={{ color: '#fff', textAlign: 'center' }}>Details</TableCell>
+                                        {/* <TableCell style={{ color: '#fff', textAlign: 'center' }}>Details</TableCell> */}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -284,6 +290,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                             <TableRow>
                                                 <TableCell style={{ textAlign: 'center' }}>{asset.name}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>{asset.pip_size}</TableCell>
+                                                <TableCell style={{ textAlign: 'center' }}>{asset.lot_size}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>{formatDate(asset.createdAt)}</TableCell>
                                                 <TableCell style={{ textAlign: 'center' }}>
                                                     <IconButton onClick={() => handleEditSymbol(asset)}>
@@ -293,11 +300,11 @@ const SymbolAssets = ({ openSidebar }) => {
                                                         <DeleteIcon />
                                                     </IconButton>
                                                 </TableCell>
-                                                <TableCell style={{ textAlign: 'center' }}>
+                                                {/* <TableCell style={{ textAlign: 'center' }}>
                                                     <IconButton onClick={() => toggleRow(asset.id)}>
                                                         {openRows[asset.id] ? <ExpandLess /> : <ExpandMore />}
                                                     </IconButton>
-                                                </TableCell>
+                                                </TableCell> */}
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell colSpan={5} style={{ padding: 0 }}>
@@ -346,6 +353,7 @@ const SymbolAssets = ({ openSidebar }) => {
                         setNewAsset({
                             name: '',
                             pip_size: '',
+                            lot_size: '',
                         });
                         setErrors({});
                         setOpenCreateModal(false);
@@ -383,10 +391,25 @@ const SymbolAssets = ({ openSidebar }) => {
                             helperText={errors.pip_size}
                             required
                         />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Lot size"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            value={newAsset.lot_size}
+                            onChange={(e) =>
+                                handleNewUserChange('lot_size', e.target.value)
+                            }
+                            error={!!errors.lot_size}
+                            helperText={errors.lot_size}
+                            required
+                        />
 
-                        {errors.pip_size && (
+                        {errors.lot_size && (
                             <Typography color="error">
-                                {errors.pip_size}
+                                {errors.lot_size}
                             </Typography>
                         )}
                     </DialogContent>
@@ -396,6 +419,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                 setNewAsset({
                                     name: '',
                                     pip_size: '',
+                                    lot_size: '',
                                 });
                                 setErrors({});
                                 setOpenCreateModal(false);
@@ -437,8 +461,8 @@ const SymbolAssets = ({ openSidebar }) => {
                                     helperText={errors.email}
                                     required
                                 />
-                                <Select
-                                    labelId="pip_size"
+                                {/* <Select
+                                    labelId="pip_size-label"
                                     value={selectedAsset.pip_size}
                                     onChange={(e) => {
                                         setSelectedAsset({
@@ -448,18 +472,52 @@ const SymbolAssets = ({ openSidebar }) => {
                                     }}
                                     style={{ width: '100%' }}
                                     displayEmpty
-                                    input={<OutlinedInput label="" />}
+                                    input={<OutlinedInput label="Pip Size" />}
                                     required
                                 >
                                     <MenuItem value="">
-                                        <span>Select pip size</span>{' '}
-                                        {/* Placeholder when nothing is selected */}
+                                        <em>Select pip size</em>
                                     </MenuItem>
-                                    {/* Leverage options */}
                                     <MenuItem value={1}>1</MenuItem>
                                     <MenuItem value={0.01}>0.01</MenuItem>
                                     <MenuItem value={0.0001}>0.0001</MenuItem>
-                                </Select>
+                                </Select> */}
+                                <TextField
+                                    margin="dense"
+                                    label="PIP size"
+                                    type="number"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={selectedAsset.pip_size}
+                                    onChange={(e) => {
+                                        setSelectedAsset({
+                                            ...selectedAsset,
+                                            pip_size: e.target.value,
+                                        });
+                                    }
+                                    }
+                                    error={!!errors.lot_size}
+                                    helperText={errors.lot_size}
+                                    required
+                                />
+                                <TextField
+                                    margin="dense"
+                                    label="Lot size"
+                                    type="number"
+                                    fullWidth
+                                    variant="outlined"
+                                    value={selectedAsset.lot_size}
+                                    onChange={(e) => {
+                                        setSelectedAsset({
+                                            ...selectedAsset,
+                                            lot_size: e.target.value,
+                                        });
+                                    }
+                                    }
+                                    error={!!errors.lot_size}
+                                    helperText={errors.lot_size}
+                                    required
+                                />
                             </>
                         )}
                     </DialogContent>
@@ -492,6 +550,7 @@ const SymbolAssets = ({ openSidebar }) => {
                                 setNewAsset({
                                     name: '',
                                     pip_size: '',
+                                    lot_size: '',
                                 });
                             }}
                             color="secondary"

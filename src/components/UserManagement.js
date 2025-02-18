@@ -51,6 +51,7 @@ const UserManagement = ({ setOpenSidebar }) => {
     companyEmail: 'admin@gmail.com',
     email: '',
     name: '',
+    password: '',
     balance: '',
     leverage: '',
     equity: '',
@@ -214,7 +215,7 @@ const UserManagement = ({ setOpenSidebar }) => {
       .then((res) => {
         fetchAccounts();
       })
-      .catch((error) => {});
+      .catch((error) => { });
     setOpenCreateModal(false);
     setOpenEditModal(false);
     setSelectedUser(null); // Clear selected user
@@ -346,7 +347,7 @@ const UserManagement = ({ setOpenSidebar }) => {
                       Name
                     </TableCell>
 
-                    <TableCell
+                    {/* <TableCell
                       style={{
                         color: '#fff',
                         textAlign: 'center'
@@ -362,7 +363,7 @@ const UserManagement = ({ setOpenSidebar }) => {
                       }}
                     >
                       Drawdown
-                    </TableCell>
+                    </TableCell> */}
 
                     <TableCell
                       style={{
@@ -373,14 +374,14 @@ const UserManagement = ({ setOpenSidebar }) => {
                       Leverage
                     </TableCell>
 
-                    {/* <TableCell
-                                            style={{
-                                                color: '#fff',
-                                                textAlign: 'center',
-                                            }}
-                                        >
-                                            Allow
-                                        </TableCell> */}
+                    <TableCell
+                      style={{
+                        color: '#fff',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Allow
+                    </TableCell>
                     <TableCell
                       style={{
                         color: '#fff',
@@ -464,16 +465,20 @@ const UserManagement = ({ setOpenSidebar }) => {
                       <TableCell style={{ textAlign: 'center' }}>
                         {account.name}
                       </TableCell>
-                      <TableCell style={{ textAlign: 'center' }}>
+                      {/* <TableCell style={{ textAlign: 'center' }}>
                         {account.plan}
                       </TableCell>
 
                       <TableCell style={{ textAlign: 'center' }}>
                         {account.drawdown}
-                      </TableCell>
+                      </TableCell> */}
 
                       <TableCell style={{ textAlign: 'center' }}>
                         {account.leverage}
+                      </TableCell>
+
+                      <TableCell style={{ textAlign: 'center' }}>
+                        {account.allow}
                       </TableCell>
 
                       <TableCell style={{ textAlign: 'center' }}>
@@ -551,7 +556,7 @@ const UserManagement = ({ setOpenSidebar }) => {
               error={!!errors.companyEmail}
             >
               <MenuItem value="">
-                <span>Select company email.</span>
+                <span>Select company email</span>
               </MenuItem>
               {companyEmails &&
                 companyEmails.map((email, index) => (
@@ -591,6 +596,18 @@ const UserManagement = ({ setOpenSidebar }) => {
 
             <TextField
               margin="dense"
+              label="Password"
+              type="password"
+              fullWidth
+              variant="outlined"
+              value={newUser.password}
+              onChange={(e) => handleNewUserChange('password', e.target.value)}
+              error={!!errors.password}
+              helperText={errors.password}
+            />
+
+            <TextField
+              margin="dense"
               label="Balance"
               type="number"
               fullWidth
@@ -601,7 +618,7 @@ const UserManagement = ({ setOpenSidebar }) => {
               helperText={errors.balance}
             />
 
-            <TextField
+            {/* <TextField
               margin="dense"
               label="Equity"
               type="number"
@@ -611,7 +628,7 @@ const UserManagement = ({ setOpenSidebar }) => {
               onChange={(e) => handleNewUserChange('equity', e.target.value)}
               error={!!errors.equity}
               helperText={errors.equity}
-            />
+            /> */}
 
             <TextField
               margin="dense"
@@ -649,8 +666,6 @@ const UserManagement = ({ setOpenSidebar }) => {
                   email: '',
                   name: '',
                   balance: '',
-                  equity: '',
-                  leverage: '',
                   usedMargin: '',
                   type: 'Live'
                 });
@@ -727,8 +742,8 @@ const UserManagement = ({ setOpenSidebar }) => {
                 />
                 <TextField
                   margin="dense"
-                  label="password"
-                  type="text"
+                  label="Password"
+                  type="password"
                   fullWidth
                   required
                   variant="outlined"
