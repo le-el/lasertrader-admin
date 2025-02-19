@@ -143,7 +143,7 @@ const App = () => {
                       </ProtectedRoute>
                     }
                   />
-                  <Route
+                  {/* <Route
                     path="/Formula"
                     element={
                       <ProtectedRoute>
@@ -166,7 +166,7 @@ const App = () => {
                         <Leverage />
                       </ProtectedRoute>
                     }
-                  />
+                  /> */}
                   <Route path="/" element={<Login />} />
                 </Routes>
               </div>
