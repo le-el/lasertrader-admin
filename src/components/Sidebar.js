@@ -188,7 +188,7 @@ const Sidebar = ({ open, onClose, setOpenSidebar }) => {
           </ListItemIcon>
           <ListItemText primary="Symbol Assets" />
         </ListItem>
-        <ListItem
+        {/* <ListItem
           onClick={() => handleNavigation('/Formula')}
           selected={selectedItem === '/Formula'}
           sx={{
@@ -238,7 +238,7 @@ const Sidebar = ({ open, onClose, setOpenSidebar }) => {
             <TrendingUpIcon />
           </ListItemIcon>
           <ListItemText primary="Leverage" />
-        </ListItem>
+        </ListItem> */}
         <Divider />
         <ListItem
           onClick={handleLogout}
