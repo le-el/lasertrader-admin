@@ -5,7 +5,7 @@ if (process.env.REACT_APP_NODE_ENV !== 'production') {
 }
 else {
     module.exports = {
-        BackendEndpoint: 'https://backend.lasertrader.co/admin',
+        BackendEndpoint: 'http://backend.lasertrader.co/admin',
     };
 }
 
