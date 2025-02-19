@@ -600,7 +600,7 @@ const UserManagement = ({ setOpenSidebar }) => {
               type="password"
               fullWidth
               variant="outlined"
-              value={newUser.password}
+              // value={newUser.password}
               onChange={(e) => handleNewUserChange('password', e.target.value)}
               error={!!errors.password}
               helperText={errors.password}
